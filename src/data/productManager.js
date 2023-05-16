@@ -9,10 +9,7 @@ class productManager {
         return newCode + 1;
     }
 
-    async addProduct(title, description, price, thumbnail, stock) {
-        if (!title || !description || !price || !thumbnail || !stock) {
-            return console.log("Se deben llenar todos los campos")
-        } else {
+    async addProduct(title, description, price, thumbnail, status, category, stock) {
             let file = await fs.promises.readFile(this.path)
             let products = JSON.parse(file)
             let newCode = products.length
@@ -23,15 +20,21 @@ class productManager {
                 price,
                 thumbnail,
                 code: this.newId(newCode),
+                status,
+                category,
                 stock
             }
 
             products.push(newProduct)
+            try{
             await fs.promises.writeFile(this.path, JSON.stringify(products))
-            return console.log("Producto Agregado")
+            return newProduct
+            }
+            catch(error){
+                console.log(error)
+                throw error;
+            }
         }
-
-    }
 
     async getProducts() {
         let file = await fs.promises.readFile(this.path)
