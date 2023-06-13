@@ -1,14 +1,14 @@
 
 import { Router } from 'express'
-import productManager from '../data/productManager.js';
+import productManager from '../DAO/productManager.js';
 import { validateP } from '../../utils/validateAddP.js';
 
 
-const productRouter = Router()
+const productRouters = Router()
 
 const manager = new productManager();
 
-productRouter.get('/', async (req, res) => {
+productRouters.get('/', async (req, res) => {
     let limit = req.query.limit;
     let lista = await manager.getProducts()
     if (limit > 0) {
@@ -18,7 +18,7 @@ productRouter.get('/', async (req, res) => {
     return res.send(lista)
 })
 
-productRouter.get('/:pid', async (req, res) => {
+productRouters.get('/:pid', async (req, res) => {
     let pid = req.params.pid;
     let lista = await manager.getProductById(pid)
     if (!lista) {
@@ -30,7 +30,7 @@ productRouter.get('/:pid', async (req, res) => {
 
 })
 
-productRouter.post('/', async (req, res) => {
+productRouters.post('/', async (req, res) => {
     let product = req.body;
     if (!validateP(product)) {
         res.status(400).send({ status: "error", msg: "Producto no validado" })
@@ -41,7 +41,7 @@ productRouter.post('/', async (req, res) => {
 
 })
 
-productRouter.put('/:pid', async (req, res) => {
+productRouters.put('/:pid', async (req, res) => {
     let pid = req.params.pid
     let produpd = req.body
     produpd.code = pid;
@@ -53,7 +53,7 @@ productRouter.put('/:pid', async (req, res) => {
     }
 })
 
-productRouter.delete('/:pid', async (req, res) => {
+productRouters.delete('/:pid', async (req, res) => {
     let pid = req.params.pid
     let productdel = await manager.deleteProduct(pid)
     if (!productdel) {
@@ -62,4 +62,4 @@ productRouter.delete('/:pid', async (req, res) => {
     res.send({ status: "Producto eliminado" })
 })
 
-export default productRouter;
+export default productRouters;

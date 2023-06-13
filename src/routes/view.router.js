@@ -1,37 +1,43 @@
 import { Router } from 'express'
-import productManager from '../data/productManager.js';
-import { validateP } from '../../utils/validateAddP.js';
+import productManager from '../DAO/productManager.js';
+import dbChatManager from '../DAO/chat.DAO.js';
+
 
 const viewRouter = Router();
-const manager = new productManager();
+// const manager = new productManager();
+const chatManager = new dbChatManager();
 
-viewRouter.get('/hbs', (req, res) => {
-    let user = {
-        name: "Ricardo",
-        lastname: "Barone"
-    }
-
-    res.render('index', user)
+viewRouter.get('/chat', async (req, res) => {
+    res.render('chat')
 })
 
-viewRouter.get('/home', async (req, res) => {
-    let lista = await manager.getProducts()
-    res.render('home', { lista })
-})
+// viewRouter.get('/hbs', (req, res) => {
+//     let user = {
+//         name: "Ricardo",
+//         lastname: "Barone"
+//     }
+
+//     res.render('index', user)
+// })
+
+// viewRouter.get('/home', async (req, res) => {
+//     let lista = await manager.getProducts()
+//     res.render('home', { lista })
+// })
 
 
-viewRouter.get('/realtimeproducts', (req, res) => {
-    res.render('realtimeproducts')
-})
+// viewRouter.get('/realtimeproducts', (req, res) => {
+//     res.render('realtimeproducts')
+// })
 
-let newP = []
+// let newP = []
 
-viewRouter.post('/realtimeproducts', async (req, res) => {
-    newP = req.body;
-    let lista = await manager.getProducts()
-    res.render('newP', {lista, newP})
-    console.log(newP)
-})
+// viewRouter.post('/realtimeproducts', async (req, res) => {
+//     newP = req.body;
+//     let lista = await manager.getProducts()
+//     res.render('newP', { lista, newP })
+//     console.log(newP)
+// })
 
 
 export default viewRouter;
