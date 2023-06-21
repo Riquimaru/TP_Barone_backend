@@ -1,14 +1,21 @@
 import { Router } from 'express'
-import productManager from '../DAO/productManager.js';
+import dbProdManager from "../DAO/prod.DAO.js";
 import dbChatManager from '../DAO/chat.DAO.js';
 
 
 const viewRouter = Router();
 // const manager = new productManager();
+const prodManager = new dbProdManager()
 const chatManager = new dbChatManager();
 
 viewRouter.get('/chat', async (req, res) => {
     res.render('chat')
+})
+
+viewRouter.get('/products', async (req, res) => {
+    let products;
+        products = await prodManager.getProducts()
+    res.render('products', {products})
 })
 
 // viewRouter.get('/hbs', (req, res) => {

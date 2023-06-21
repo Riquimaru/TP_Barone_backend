@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { prodModel } from "../DAO/models/prod.model.js";
 import dbProdManager from "../DAO/prod.DAO.js";
 
 const productRouter = Router();
@@ -15,7 +16,21 @@ productRouter.get('/', async (req, res) => {
     res.send({ status: "success", payload: products })
 })
 
-productRouter.get('/:pid', async (req, res) => {
+productRouter.get('/products/:query/:sort?/:limit?/:page?', async (req, res) => {
+    let query = req.params.query
+    let sort = req.params.sort
+    let limit = req.params.limit
+    let page = req.params.page
+    let products;
+    try {
+        products = await prodManager.getProductsByQuery(query, sort)
+    } catch (error) {
+        res.status(404).send({ status: "error", error })
+    }
+    res.send({ status: "success", payload: products })
+})
+
+productRouter.get('/productid/:pid', async (req, res) => {
     let pid = req.params.pid;
     let product;
     try {
@@ -28,18 +43,18 @@ productRouter.get('/:pid', async (req, res) => {
 })
 
 productRouter.post('/', async (req, res) => {
-    let { title, description, price, stock } = req.body;
+    let { title, description, price, status, stock } = req.body;
     let prod;
     if (!title || !description || !price || !stock) return res.send({ status: "error", error: "Falta completar valores" });
     try {
-        prod = await prodManager.newProducts(title, description, price, stock)
+        prod = await prodManager.newProducts(title, description, price, status, stock)
     } catch (error) {
         res.status(500).send({status: "error", error})
     }
     res.send({ status: "success", payload: prod })
 })
 
-productRouter.put('/:pid', async(req,res)=>{
+productRouter.put('/productid/:pid', async(req,res)=>{
     let {pid} = req.params;
     let {title, description, price, stock} = req.body;
     let prod;
@@ -52,7 +67,7 @@ productRouter.put('/:pid', async(req,res)=>{
     res.send({status:"success", payload: prod})
 })
 
-productRouter.delete('/:pid', async(req, res)=>{
+productRouter.delete('/productid/:pid', async(req, res)=>{
     let {pid} = req.params;
     let prod;
     try {

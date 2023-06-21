@@ -28,19 +28,56 @@ cartRouters.post('/', async (req, res) => {
     res.send({ status: "success", payload: cart })
 })
 
-cartRouters.post('/:cid/product/:pid', async (req, res) => {
+cartRouters.put('/:cid', async (req, res)=>{
+    let cid = req.params.cid;
+    let prods = req.body;
+    let cart;
+
+    try {
+        cart = await cartManager.addProdToCart(cid, prods)
+    } catch (error) {
+        res.status(500).send({status: "error", error})
+    }
+    res.send({ status: "success", payload: cart })
+})
+
+cartRouters.post('/:cid/products/:pid', async (req, res) => {
     let cid = req.params.cid
     let pid = req.params.pid
     let qty = req.body;
     let cart;
 
     try {
-       cart = await cartManager.addProdCart(cid, pid, qty)
+       cart = await cartManager.addProdCartQty(cid, pid, qty)
     } catch (error) {
         res.status(500).send({status: "error", error})
     }
     res.send({ status: "success", payload: cart })
 })
+
+cartRouters.delete('/:cid', async(req, res)=>{
+    let cid = req.params.cid;
+    let cart;
+    try {
+        cart = await cartManager.delCartProducts(cid)
+    } catch (error) {
+        res.status(500).send({status: "error", error})
+    }
+    res.send({status:"success", payload: cart})
+})
+
+cartRouters.delete('/:cid/products/:pid', async(req, res)=>{
+    let cid = req.params.cid;
+    let pid = req.params.pid
+    let cart;
+    try {
+        cart = await cartManager.delCartProduct(cid, pid)
+    } catch (error) {
+        res.status(500).send({status: "error", error})
+    }
+    res.send({status:"success", payload: cart})
+})
+
 
 
 export default cartRouters;
