@@ -10,7 +10,7 @@ class dbCartManager {
     async getCartById(id) {
         let cart;
         try {
-            cart = await this.model.findOne({ _id: id })
+            cart = await this.model.findOne({ _id: id }).lean()
         } catch (error) {
             console.log(error)
         }
