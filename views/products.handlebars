@@ -1,6 +1,11 @@
 <body>
     <div>
         <h1>Productos</h1>
+
+        <h1>USER OK LOGIN!</h1>
+        <h2><i>Bienvenido {{ user }}</i></h2>
+
+        <button class="btn btn-danger my-5" onclick="location.href='/api/session/logout'">LOGOUT</button>
         {{#each products}}
         <ul>
             <li>Nombre: {{this.description}}</li>
