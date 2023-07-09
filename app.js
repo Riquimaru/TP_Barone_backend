@@ -32,11 +32,6 @@ app.set('view engine', 'handlebars')
 //     .then(() => console.log('Conectado'))
 //     .catch(err => console.log(err))
 
-app.use('/api/product', productRouters) //FS
-app.use('/api/cart', cartRouter) //FS
-app.use('/', viewRouter) // HBS /chat
-app.use('/mongo/product', productRouter) // Mongoose para productos
-app.use('/mongo/cart', cartRouters) // Mongoose para carrito
 app.use(session({
     store: MongoStore.create({
         mongoUrl: 'mongodb+srv://rbarone:coder2023@cluster0.shlkah8.mongodb.net/ecommerce?retryWrites=true&w=majority',
@@ -47,6 +42,12 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }))
+
+app.use('/api/product', productRouters) //FS
+app.use('/api/cart', cartRouter) //FS
+app.use('/', viewRouter) // HBS /chat
+app.use('/mongo/product', productRouter) // Mongoose para productos
+app.use('/mongo/cart', cartRouters) // Mongoose para carrito
 app.use('/api/session', sessionRouter)
 
 const chatManager = new dbChatManager();

@@ -13,17 +13,17 @@ viewRouter.get('/chat', async (req, res) => {
     res.render('chat')
 })
 
-viewRouter.get('/products', async (req, res) => {
-    let products;
-        products = await prodManager.getProducts()
-    res.render('products', {products})
-})
+// viewRouter.get('/products', async (req, res) => {
+//     let products;
+//     products = await prodManager.getProducts()
+//     res.render('products', { products })
+// })
 
 viewRouter.get('/carts/:cid', async (req, res) => {
     let cid = req.params.cid;
     let carts;
-        carts = await cartManager.getCartById(cid)
-        res.render('carts', {carts})
+    carts = await cartManager.getCartById(cid)
+    res.render('carts', { carts })
 })
 
 // viewRouter.get('/hbs', (req, res) => {

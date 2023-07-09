@@ -5,10 +5,16 @@ class dbProdManager {
         this.model = prodModel;
     }
 
-    async getProducts() {
+    async getProducts(lim, page) {
         let prod;
+        if (!lim) {
+            lim = 10;
+        }
+        if (!page) {
+            page = 1;
+        }
         try {
-            prod = await this.model.find().lean()
+            prod = await this.model.paginate({}, { limit: lim, page: page, lean: true })
         } catch (error) {
             console.log(error)
         }
@@ -29,6 +35,12 @@ class dbProdManager {
         let prod;
         console.log(query)
         console.log(order)
+        if (order == "1") {
+            order = 1
+        }
+        if (order == "-1") {
+            order = -1
+        }
         try {
             if (order) {
                 prod = await this.model.aggregate([
@@ -38,11 +50,11 @@ class dbProdManager {
                     {
                         $group: {
                             _id: '$description',
-                            product: { $push: "$$ROOT" } 
+                            product: { $push: "$$ROOT" }
                         }
                     },
                     {
-                        $sort: { price: 1 }
+                        $sort: { product: order }
                     },
                     {
                         $project: {
@@ -60,7 +72,7 @@ class dbProdManager {
                     {
                         $group: {
                             _id: '$description',
-                            product: { $push: "$$ROOT" } 
+                            product: { $push: "$$ROOT" }
                         }
                     },
                     {

@@ -30,7 +30,7 @@ cartRouters.post('/', async (req, res) => {
 
 cartRouters.put('/:cid', async (req, res)=>{
     let cid = req.params.cid;
-    let prods = req.body;
+    let prods = req.body.prods;
     let cart;
 
     try {
