@@ -17,7 +17,18 @@ export const getAll = async () => {
 export const getByEmail = async (email) => {
     let result
     try {
-        result = await userModel.findOne({email})
+        result = await userModel.findOne({ email })
+    } catch (error) {
+        console.log(error)
+    }
+
+    return result;
+}
+
+export const getById = async (id) => {
+    let result
+    try {
+        result = await userModel.findOne({ _id: id })
     } catch (error) {
         console.log(error)
     }
@@ -33,5 +44,15 @@ export const createUser = async (user) => {
         console.log(error)
     }
 
+    return result;
+}
+
+export const updateUserPassword = async (email, newPassword) => {
+    let result
+    try {
+        result = await userModel.updateOne({ email: email }, { $set: { password: newPassword } })
+    } catch (error) {
+        console.log(error)
+    }
     return result;
 }

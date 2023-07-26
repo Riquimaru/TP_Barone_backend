@@ -13,6 +13,9 @@ import mongoose from 'mongoose'
 import session from 'express-session'
 import MongoStore from 'connect-mongo'
 import sessionRouter from './src/routes/session.js'
+import passport from 'passport'
+import initializePassport from './src/config/passport.config.js'
+import cookieParser from 'cookie-parser'
 
 
 
@@ -22,6 +25,7 @@ const socketServer = new Server(httpServer)
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(__dirname + '/public'))
+app.use(cookieParser())
 
 
 app.engine('handlebars', handlebars.engine())
@@ -43,6 +47,10 @@ app.use(session({
     saveUninitialized: false
 }))
 
+initializePassport()
+
+app.use(passport.initialize())
+app.use(passport.session())
 app.use('/api/product', productRouters) //FS
 app.use('/api/cart', cartRouter) //FS
 app.use('/', viewRouter) // HBS /chat
